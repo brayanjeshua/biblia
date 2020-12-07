@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const xss = require('xss');
 
 (async () => {
     // Code
@@ -8,10 +9,18 @@ const puppeteer = require('puppeteer');
 
     const page = await browser.newPage()
 
-    await page.goto('https://wol.jw.org/es/wol/l/r4/lp-s?q=rom+8%3A28')
+    let libro = 'sal';
+    let capitulo = 46;
+    let versiculo= 1;
+
+    const URL = `https://wol.jw.org/es/wol/l/r4/lp-s?q=${libro}+${capitulo}%3A${versiculo}`;
+    console.log(URL)
+
+    await page.goto(URL)
 
     var traerDatos = await page.evaluate(() => {
-        const textwithA = document.querySelector('.resultItems .scalableui p span')
+
+        const textwithA = document.querySelector('.resultItems .scalableui div')
         console.log(textwithA)
 
         return textwithA.innerHTML
@@ -20,12 +29,9 @@ const puppeteer = require('puppeteer');
     console.log(traerDatos)
 
 
-
-
-    console.log('Cerrar Navegador')
-
+    // console.log('Cerrar Navegador')
     browser.close()
-    console.log('Navegador Cerrado')
+    // console.log('Navegador Cerrado')
     
 
 
